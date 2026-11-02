@@ -25,10 +25,10 @@ subroutine interpol_0(ndim, x, y, xin, yout)
 
 
     ! We loop over all the grid points. We subtract 1 from the dimension to avoid an overshoot
-    do i=1,ndim-1
+    do i = 1, ndim-1
         ! We look for the relative position of the introduced abscissa within the known grid of points and perform the interpolation
         if ((xin.ge.x(i)).and.(xin.le.x(i+1))) then
-            yout=y(i)
+            yout = y(i)
         endif
 
     enddo
@@ -58,11 +58,11 @@ subroutine interpol_1(ndim, x, y, xin, yout)
 
     
     ! We loop over all the grid points. We subtract 1 from the dimension to avoid an overshoot
-    do i=1,ndim-1
+    do i = 1, ndim-1
 
         ! We look for the relative position of the introduced abscissa within the known grid of points and perform the interpolation
         if ((xin.ge.x(i)).and.(xin.le.x(i+1))) then
-            yout=y(i)+((y(i+1)-y(i))/(x(i+1)-x(i)))*(xin-x(i))
+            yout = y(i) + ((y(i+1) - y(i)) / (x(i+1) - x(i))) * (xin - x(i))
         endif
 
     enddo
@@ -317,7 +317,7 @@ subroutine newtonraphson(func, xini, prec, niter, valroot)
 
         B = A - (fA/dfA)
 
-        niter=niter+1
+        niter = niter + 1
 
         write(1,*) niter, B
     enddo
