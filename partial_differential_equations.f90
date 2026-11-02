@@ -1,4 +1,4 @@
-! This script contains some useful subroutines to solve differential equations with partial derivatives.
+! This script contains some useful subroutines to solve partial differential equations (PDEs).
 
 
 subroutine poisson_2D_dir(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
@@ -59,7 +59,7 @@ subroutine poisson_2D_dir(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
             else                    ! Interior points
                 Txy_old(i,j) = Tint
                 Txy(i,j) = Tint
-            endif 
+            endif
         enddo
     enddo
 
@@ -122,8 +122,8 @@ subroutine poisson_2D_dir(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
     enddo
 
     ! We write to screen the total number of iterations the program needed to reach the steady state
-    write(1,*) 
-    write(1,*) 
+    write(1,*)
+    write(1,*)
     write(*,*) "Number of iterations:", count
 
     return
@@ -142,7 +142,7 @@ subroutine poisson_2D_neu(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
 
     ! DESCRIPTION:
     ! This subroutine characterizes the steady-state temperature profile of a two-dimensional rectangular plate from an initial temperature distribution,
-    ! with thermal sources and either Dirichlet or Neumann boundary conditions, performing all the calculations inside a mesh/grid of points. To do so, 
+    ! with thermal sources and either Dirichlet or Neumann boundary conditions, performing all the calculations inside a mesh/grid of points. To do so,
     ! it can use the Jacobi (0), over-relaxation (1) or Gauss-Seidel (2) methods depending on the value of the parameter 'icontrol' introduced.
 
     ! VARIABLES:
@@ -206,7 +206,7 @@ subroutine poisson_2D_neu(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
         ! Txy(i,1) = Txy(i,3) + 2*h * T0(3)
         ! Txy_old(i,Ny+2) = Txy_old(i,Ny) + 2*h * T0(4)
         ! Txy(i,Ny+2) = Txy(i,Ny) + 2*h * T0(4)
-    enddo    
+    enddo
 
     ! We start with an arbitrarily large error value so as to enter the while loop
     err = 1.d6
@@ -252,7 +252,7 @@ subroutine poisson_2D_neu(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
 
                 ! We apply the Neumann BCs to the y endpoints
                 Txy(1,j) = Txy(3,j) + 2*h * T0(1)
-                Txy(Nx+2,j) = Txy(Nx,j) + 2*h * T0(2)    
+                Txy(Nx+2,j) = Txy(Nx,j) + 2*h * T0(2)
             enddo
             ! We apply the Neumann BCs to the x endpoints
             !Txy(i,1) = Txy(i,3) + 2*h * T0(3)
@@ -272,8 +272,8 @@ subroutine poisson_2D_neu(icontrol, Nx, Ny, h, T0, Tint, S, tol, Txy)
     enddo
 
     ! We write to screen the total number of iterations the program needed to reach the steady state
-    write(1,*) 
-    write(1,*) 
+    write(1,*)
+    write(1,*)
     write(*,*) "Number of iterations:", count
 
     return
@@ -501,8 +501,8 @@ subroutine crank_nicolson(icontrol, Nx, dx, Nt, dt, alpha, T_new)
                     x = i*dx
                     write(1,*) t, x, T_old(i) + Tamb
                 enddo
-                write(1,*) 
-                write(1,*) 
+                write(1,*)
+                write(1,*)
             endif
 
             ! Every 50 time steps, we write the temperature profile of the bar
@@ -511,15 +511,15 @@ subroutine crank_nicolson(icontrol, Nx, dx, Nt, dt, alpha, T_new)
                     x = i*dx
                     write(1,*) t, x, T_new(i) + Tamb
                 enddo
-                write(1,*) 
-                write(1,*) 
+                write(1,*)
+                write(1,*)
             endif
         endif
 
     enddo
 
-    write(1,*) 
-    write(1,*) 
+    write(1,*)
+    write(1,*)
 
     return
 end
@@ -536,16 +536,16 @@ subroutine tridiag(A, B, C, R, PSI, IMAX)
     ! where T is a tridiagonal matrix and A (lower), B (central), C (upper) its subdiagonals
     !  A   0 a1, a2, a3, ...., aIMAX
     !  B   b1 b2, b3, b4, ...., bIMAX
-    !  C   c1, c2, c3, c4, ...., 0 
+    !  C   c1, c2, c3, c4, ...., 0
 
-    if(B(1).EQ.0.) pause
+    if(B(1).EQ.0.) stop 'Zero pivot in tridiag'
     BET = B(1)
     PSI(1) = R(1) / BET
 
     do J = 2, IMAX
         GAM(J) = C(J-1) / BET
         BET = B(J) - A(J) * GAM(J)
-        if(BET.EQ.0) pause
+        if(BET.EQ.0) stop 'Zero pivot in tridiag'
         PSI(J) = (R(J) - A(J) * PSI(J-1)) / BET
     enddo
 
