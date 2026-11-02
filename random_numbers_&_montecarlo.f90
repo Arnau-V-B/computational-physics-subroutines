@@ -157,7 +157,7 @@ subroutine accept(ndata, func, xlow, xhigh, sup, num)
 end
 
 
-subroutine uniforme(ndata, xlow, xhigh, num)
+subroutine uniform(ndata, xlow, xhigh, num)
     implicit none
     integer :: ndata, i
     double precision :: xlow, xhigh, num(ndata)
